@@ -18,7 +18,7 @@ not_liked_articles = []
 
 app = Flask(__name__)
 
-with open('all_articles.csv') as f:
+with open('all_articles.csv', 'r', encoding='utf-8') as f:
     reader = csv.reader(f)
     data = list(reader)
     all_articles = data[1:]
@@ -33,8 +33,8 @@ def get_movie():
 @app.route("/liked-articles",methods=["POST"])
 def liked_article():
     article = all_articles[0]
-    all_articles = all_articles[1:]
     liked_articles.append(article)
+    all_articles.pop(0)
     return jsonify({
         "status" : "success"
     }), 201
@@ -42,11 +42,11 @@ def liked_article():
 @app.route("/unliked-not_liked_articles",methods=["POST"])
 def liked_movie():
     article = all_articles[0]
-    all_articles = all_articles[1:]
     not_liked_articles.append(article)
+    all_articles.pop(0)
     return jsonify({
         "status" : "success"
     }), 201
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True, port=9090)
